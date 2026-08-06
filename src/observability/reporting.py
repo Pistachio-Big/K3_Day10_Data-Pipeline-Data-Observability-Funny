@@ -69,5 +69,47 @@ def generate_corruption_report(
     corrupted_freshness: dict[str, Any],
     repaired_freshness: dict[str, Any],
 ) -> None:
-    """TODO(student): viet markdown report so sanh baseline/corrupted/repaired."""
-    raise NotImplementedError("Student task: implement corruption comparison report.")
+    """Viet markdown report so sanh baseline/corrupted/repaired tro toi artifact that."""
+    metric_keys = ["retrieval_hit_rate", "mean_token_f1", "judge_accuracy", "mean_judge_score"]
+
+    lines: list[str] = [
+        "# Corruption Comparison Report",
+        "",
+        "## Metrics: baseline vs corrupted vs repaired",
+        "",
+        "| Metric | Baseline | Corrupted | Repaired | Δ corruption | Δ repair |",
+        "|---|---:|---:|---:|---:|---:|",
+    ]
+    for key in metric_keys:
+        base = baseline_metrics.get(key)
+        corr = corrupted_metrics.get(key)
+        rep = repaired_metrics.get(key)
+        d_corr = (corr - base) if isinstance(base, (int, float)) and isinstance(corr, (int, float)) else None
+        d_rep = (rep - corr) if isinstance(corr, (int, float)) and isinstance(rep, (int, float)) else None
+        lines.append(
+            f"| {key} | {_fmt(base)} | {_fmt(corr)} | {_fmt(rep)} | {_fmt(d_corr)} | {_fmt(d_rep)} |"
+        )
+
+    lines += [
+        "",
+        "## Data quality (passed / total)",
+        f"- corrupted: {corrupted_quality.get('passed')}/{corrupted_quality.get('total_checks')}",
+        f"- repaired: {repaired_quality.get('passed')}/{repaired_quality.get('total_checks')}",
+        "",
+        "## Freshness",
+        f"- corrupted: is_fresh={corrupted_freshness.get('is_fresh')}, "
+        f"stale_rows={corrupted_freshness.get('stale_rows')}/{corrupted_freshness.get('total_rows')}",
+        f"- repaired: is_fresh={repaired_freshness.get('is_fresh')}, "
+        f"stale_rows={repaired_freshness.get('stale_rows')}/{repaired_freshness.get('total_rows')}",
+        "",
+        "## Ket luan nhan qua",
+        "1. Corruption (blank summary / stale date / noise / truncate / duplicate) "
+        "-> quality checks FAIL + freshness stale -> retrieval_hit_rate & mean_token_f1 giam.",
+        "2. Repair chay lai cleaning tu raw source -> quality/freshness phuc hoi "
+        "-> metrics quay lai gan baseline.",
+        "",
+        "> Luu y: chi ket luan corruption 'co tac dong' khi so lieu that su thay doi. "
+        "Neu recovery chua hoan toan, ghi ro signal/metric con xau.",
+        "",
+    ]
+    write_text(report_path, "\n".join(lines) + "\n")
