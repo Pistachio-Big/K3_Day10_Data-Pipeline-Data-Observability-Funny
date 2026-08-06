@@ -24,7 +24,9 @@
 Nhóm Funny đã chạy end-to-end cả Phase 1 (baseline) và Phase 2
 (corrupt → evaluate → repair → compare). Phase 1 sinh bộ 6 artifact
 chuẩn: clean dataset 24 rows, Chroma collection `papers-baseline`,
-24 câu hỏi test (4 loại: summary/authors/date/categories), metric
+24 câu hỏi test (3 loại thực tế: summary/authors/date — Crossref
+không trả `subject` nên `categories_joined` rỗng, không sinh câu loại
+categories), metric
 agent (`retrieval_hit_rate=1.000`, `mean_token_f1=1.000`,
 `judge_accuracy≈0.958`, `mean_judge_score≈4.833`) và quality 6/6 pass
 với `is_fresh=true`. Phase 2 đã tái dựng từ raw records
@@ -92,7 +94,7 @@ trong `data/embeddings/` đủ để tái dựng deterministic.
 | Retrieval `top_k`           | 4 |
 | Freshness threshold          | 180 ngày |
 | Vector store                | Chroma persistent (`data/chroma/`, đã gitignore) |
-| Test set questions          | 24 (4 loại: summary / authors / date / categories) |
+| Test set questions          | 24 (3 loại: summary 8 / authors 8 / date 8; `categories` rỗng từ Crossref nên không sinh) |
 | Random seed (corruption)    | 42 / 7 / 11 / 3 (cố định → reproducible) |
 | Random seed (ragas)         | bật khi `RUN_RAGAS=1` (mặc định tắt trong baseline) |
 
@@ -208,8 +210,8 @@ freshness `is_fresh=true`.
 
 | Thành phần                             | Cấu hình thực tế          |
 | ---------------------------------------- | ----------------------------- |
-| Số câu hỏi                            | 24 (chia đều 4 loại)     |
-| Các `question_type`                    | `summary`, `authors`, `date`, `categories` |
+| Số câu hỏi                            | 24 (summary 8 / authors 8 / date 8)     |
+| Các `question_type`                    | `summary`, `authors`, `date` (loại `categories` không sinh vì `categories_joined` rỗng) |
 | Ground-truth document ID                 | `expected_paper_id` (DOI), mỗi câu trỏ về đúng paper trong test set |
 | Embedding model                          | `sentence-transformers/all-MiniLM-L6-v2`, `normalize_embeddings=True` |
 | Vector store/collection                  | Chroma persistent (`data/chroma/`); baseline `papers-baseline`, corrupted `papers-corrupted`, repaired `papers-repaired` |
@@ -293,7 +295,7 @@ Sau khi áp cả 6 loại + rebuild `text_for_embedding` từ dữ liệu đã h
   `papers-corrupted`)
 - `data/results/corrupted_metrics.json`, `corrupted_answers.json`
 - `data/quality/quality_corrupted.json`,
-  `data/quality/freshness_report_corrupted.json`
+  `data/quality/freshness_corrupted.json`
 
 Corruption log:
 
@@ -323,7 +325,7 @@ Số liệu dưới đây trích từ `report/commit-map-pha2.md` và file
 | `mean_token_f1`        |    1.000 |     0.505 |    1.000 |                −0.495    |   100% | Blank summary + noise làm câu trả lời `_extract_answer` rút từ `summary` rỗng/sai |
 | `judge_accuracy`       |    0.958 |     0.458 |    0.958 |                −0.500    |   100% | Judge LLM phạt các câu trả lời sai vì token F1 thấp + abstract bị nhiễu |
 | `mean_judge_score`     |    4.833 |     3.125 |    4.833 |                −1.708    |   100% | Trung bình điểm judge tụt 1.7/5 |
-| Quality checks pass/total |  6/6 pass |   4/6 |   6/6 | 2 check fail (`summary_length`, `paper_id_unique`) + thêm `freshness` fail | 100% | Cả 3 check fail đều do corruption gây ra → repair khôi phục đủ |
+| Quality checks pass/total |  6/6 pass |   4/6 |   6/6 | 2 check fail: `paper_id_unique` (duplicate) + `freshness` (stale) | 100% | `summary_length` vẫn pass (coverage 0.826 ≥ 0.8); cả 2 check fail do corruption → repair khôi phục đủ |
 | Freshness status        | fresh | **stale** (5/23) | fresh | `stale_rows` tăng 0 → 5 do `drop_latest` + `stale_date` | 100% | Threshold 180 ngày; `stale_date` đẩy 4 dòng `published=2005-01-01`, kèm `drop_latest` ảnh hưởng max-date → 5 stale_rows |
 
 Hai chuỗi nhân quả có quan hệ nguyên nhân–bằng chứng:
