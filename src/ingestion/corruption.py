@@ -1,6 +1,6 @@
 """Simulate cac dang data corruption co chu dich.
 
-Owner: Huy Anh (Cleaning & Corruption). Pha 2 (CP5).
+Huy Anh (Cleaning & Corruption). Pha 2 (CP5).
 
 Moi loai corruption khop mot quality/freshness signal do duoc:
 - drop_latest / stale_date  -> freshness xau
