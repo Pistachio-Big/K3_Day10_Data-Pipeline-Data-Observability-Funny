@@ -199,7 +199,7 @@
     "judge": {
       "score": 5,
       "correct": true,
-      "reasoning": "The model answer is identical to the reference answer, accurately summarizing the paper's focus on time-series models and retrieval-based augmentation in financial forecasting."
+      "reasoning": "The model answer is identical to the reference answer, accurately summarizing the key points of the paper."
     }
   },
   {
@@ -460,7 +460,7 @@
     "judge": {
       "score": 1,
       "correct": false,
-      "reasoning": "The model answer is identical to the reference answer but does not summarize the paper about the Microsoft Azure AI/machine learning hackathon. It fails to address the specific topic of the paper."
+      "reasoning": "The model answer is identical to the reference answer but does not summarize the paper about the Microsoft Azure AI/ML hackathon. It fails to address the specific topic of the paper."
     }
   },
   {
@@ -692,7 +692,7 @@
     "judge": {
       "score": 5,
       "correct": true,
-      "reasoning": "The model answer matches the reference answer exactly, providing the correct publication date."
+      "reasoning": "The model answer matches the reference answer exactly, indicating that it is materially correct."
     }
   }
 ]
