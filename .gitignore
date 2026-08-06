@@ -6,3 +6,5 @@ src/*.egg-info/
 lab/
 **/__pycache__/
 data/chroma/
+.DS_Store
+.idea/

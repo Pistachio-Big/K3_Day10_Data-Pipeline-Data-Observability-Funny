@@ -1,15 +1,15 @@
 {
-  "report_name": "baseline",
+  "report_name": "corrupted",
   "total_checks": 6,
-  "passed": 6,
-  "failed": 0,
+  "passed": 4,
+  "failed": 2,
   "checks": [
     {
       "check": "row_count",
       "dimension": "Completeness",
       "passed": true,
       "detail": {
-        "rows": 24
+        "rows": 23
       }
     },
     {
@@ -23,9 +23,9 @@
     {
       "check": "paper_id_unique",
       "dimension": "Uniqueness",
-      "passed": true,
+      "passed": false,
       "detail": {
-        "duplicates": 0
+        "duplicates": 2
       }
     },
     {
@@ -41,17 +41,17 @@
       "dimension": "Validity",
       "passed": true,
       "detail": {
-        "below_threshold": 0,
+        "below_threshold": 4,
         "min_chars": 20,
-        "coverage": 1.0
+        "coverage": 0.826
       }
     },
     {
       "check": "freshness",
       "dimension": "Timeliness",
-      "passed": true,
+      "passed": false,
       "detail": {
-        "stale_rows": 0,
+        "stale_rows": 5,
         "threshold_days": 180
       }
     }

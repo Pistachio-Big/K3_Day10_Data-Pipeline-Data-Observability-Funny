@@ -1,0 +1,9 @@
+# Chuan hoa line-ending: hết lệch CRLF (Windows) vs LF (macOS/Linux)
+* text=auto eol=lf
+
+# File nhi phan: khong dung dinh line-ending
+*.png binary
+*.jpg binary
+*.pdf binary
+*.bin binary
+*.sqlite3 binary
