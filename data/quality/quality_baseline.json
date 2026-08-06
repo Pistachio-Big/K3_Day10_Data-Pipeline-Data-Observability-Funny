@@ -1,0 +1,59 @@
+{
+  "report_name": "baseline",
+  "total_checks": 6,
+  "passed": 6,
+  "failed": 0,
+  "checks": [
+    {
+      "check": "row_count",
+      "dimension": "Completeness",
+      "passed": true,
+      "detail": {
+        "rows": 24
+      }
+    },
+    {
+      "check": "paper_id_not_null",
+      "dimension": "Completeness",
+      "passed": true,
+      "detail": {
+        "nulls": 0
+      }
+    },
+    {
+      "check": "paper_id_unique",
+      "dimension": "Uniqueness",
+      "passed": true,
+      "detail": {
+        "duplicates": 0
+      }
+    },
+    {
+      "check": "title_not_null",
+      "dimension": "Completeness",
+      "passed": true,
+      "detail": {
+        "empty_titles": 0
+      }
+    },
+    {
+      "check": "summary_length",
+      "dimension": "Validity",
+      "passed": true,
+      "detail": {
+        "below_threshold": 0,
+        "min_chars": 20,
+        "coverage": 1.0
+      }
+    },
+    {
+      "check": "freshness",
+      "dimension": "Timeliness",
+      "passed": true,
+      "detail": {
+        "stale_rows": 0,
+        "threshold_days": 180
+      }
+    }
+  ]
+}
